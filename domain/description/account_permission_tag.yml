@@ -1,0 +1,13 @@
+---
+display_name: 账户权限标签关系
+description: 账户权限标签关系
+structs: []
+relationships:
+    account:
+        entity: account
+        type: belongs_to
+    permission_tag:
+        entity: permission_tag
+        type: belongs_to
+snaps: []
+...

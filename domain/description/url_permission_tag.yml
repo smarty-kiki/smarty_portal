@@ -1,0 +1,13 @@
+---
+display_name: 地址权限标签关联
+description: 地址权限标签关联
+structs: []
+relationships:
+    permission_tag:
+        entity: permission_tag
+        type: belongs_to
+    url:
+        entity: url
+        type: belongs_to
+snaps: []
+...

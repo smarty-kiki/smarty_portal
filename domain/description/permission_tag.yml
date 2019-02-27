@@ -1,0 +1,17 @@
+---
+display_name: 权限标签
+description: 权限标签
+structs:
+    name:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 名称
+        description: 名称
+        allow_null: false
+relationships:
+    system:
+        entity: system
+        type: belongs_to
+snaps: []
+...

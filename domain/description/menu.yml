@@ -1,0 +1,27 @@
+---
+display_name: 目录
+description: 目录
+structs:
+    name:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 名称
+        description: 名称
+        allow_null: false
+    level:
+        type: int(11)
+        format: ~
+        format_description: ~
+        display_name: 等级
+        description: 等级
+        allow_null: false
+relationships:
+    system:
+        entity: system
+        type: belongs_to
+    menu:
+        entity: menu
+        type: belongs_to
+snaps: []
+...

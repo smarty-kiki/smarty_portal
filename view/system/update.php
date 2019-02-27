@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>{{ system::$entity_display_name }}[{{ $system->id }}]修改</title>
+    <style>
+     table {
+         font-family: verdana,arial,sans-serif;
+         font-size:11px;
+         color:#333333;
+         border-width: 1px;
+         border-color: #666666;
+         border-collapse: collapse;
+         width: 100%;
+     }
+     table th {
+         border-width: 1px;
+         padding: 8px;
+         border-style: solid;
+         border-color: #666666;
+         background-color: #dedede;
+         text-align: center;
+     }
+     table td {
+         border-width: 1px;
+         padding: 8px;
+         border-style: solid;
+         border-color: #666666;
+         background-color: #ffffff;
+         text-align: center;
+     }
+    </style>
+</head>
+<body>
+<table>
+<tbody>
+    <form action='' method='POST'>
+    @foreach (system::$struct_types as $struct => $type)
+    <tr>
+        <td>
+            {{ array_key_exists($struct, system::$struct_display_names)? system::$struct_display_names[$struct]: $struct }}
+            @if ($struct === 'api_authorized_token')
+            (任意修改即会重新生成)
+            @endif
+        </td>
+        <td>
+            @if (system::$struct_types[$struct] === 'enum')
+            <select name='{{ $struct }}'>
+                @foreach (system::$struct_formats[$struct] as $key => $value)
+                <option value='{{ $key }}' {{ $key === $system->{$struct}?'selected':'' }}>{{ $value }}</option>
+                @endforeach
+            </select>
+            @else
+                @if ($struct === 'account_id')
+                    <select name='{{ $struct }}'>
+                    @foreach ($choice_accounts as $id => $account)
+                        <option value='{{ $id }}' {{ $id === $system->{$struct}?'selected':'' }}>{{ '[ID:'.$account->id.'] '.$account->get_display_name() }}</option>
+                    @endforeach
+                    </select>
+                @else
+                    <input type='{{ $type }}' name='{{ $struct }}' value='{{ $system->{$struct} }}'>
+                @endif
+            @endif
+        </td>
+    </tr>
+    @endforeach
+    <tr>
+        <td>
+            <a href='javascript:window.history.back(-1);'>取消</a>
+        </td>
+        <td>
+            <input type='submit' value='保存'>
+        </td>
+    </tr>
+    </form>
+</tbody>
+</table>
+</body>
+<script>
+</script>
+</html>

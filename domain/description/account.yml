@@ -1,0 +1,67 @@
+---
+display_name: 账号
+description: 登陆使用的账号
+structs:
+    nick_name:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 昵称
+        description: 昵称
+        allow_null: false
+    email:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 邮箱
+        description: 邮箱
+        allow_null: false
+    password:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 密码
+        description: 密码
+        allow_null: false
+    sign:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 登陆标记
+        description: 登陆标记
+        allow_null: false
+    last_login_ip:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 上次登陆IP
+        description: 上次登陆IP
+        allow_null: false
+    now_login_ip:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 本次登陆IP
+        description: 本次登陆IP
+        allow_null: false
+    is_admin:
+        type: varchar(45)
+        format: 
+            YES: 是
+            NO: 否
+        format_description: ~
+        display_name: 是否门户管理员
+        description: 是否门户管理员
+        allow_null: false
+    status:
+        type: varchar(45)
+        format:
+            VALID: 有效
+            INVALID: 无效
+        format_description: ~
+        display_name: 状态
+        description: 状态
+        allow_null: false
+relationships: []
+snaps: []
+...

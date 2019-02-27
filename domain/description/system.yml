@@ -1,0 +1,31 @@
+---
+display_name: 系统
+description: 可以通过统一入口平台使用的系统
+structs:
+    name:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 名称
+        description: 名称
+        allow_null: false
+    api_authorized_token:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 系统接口口令
+        description: 
+        allow_null: false
+    api_authorized_ip:
+        type: varchar(45)
+        format: ~
+        format_description: ~
+        display_name: 系统接口授权IP
+        description: 系统接口授权IP
+        allow_null: false
+relationships:
+    account:
+        entity: account
+        type: belongs_to
+snaps: []
+...
