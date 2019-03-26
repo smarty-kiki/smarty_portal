@@ -77,7 +77,6 @@ class account extends entity
 
     public function __construct()
     {/*{{{*/
-        
     }/*}}}*/
 
     public static function create($email, $password, $is_admin = self::IS_ADMIN_NO)

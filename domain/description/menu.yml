@@ -9,6 +9,13 @@ structs:
         display_name: 名称
         description: 名称
         allow_null: false
+    url:
+        type: varchar(255)
+        format: ~
+        format_description: ~
+        display_name: 地址
+        description: 地址
+        allow_null: false
     level:
         type: int(11)
         format: ~
@@ -22,6 +29,6 @@ relationships:
         type: belongs_to
     menu:
         entity: menu
-        type: belongs_to
+        type: has_one
 snaps: []
 ...

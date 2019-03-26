@@ -39,9 +39,8 @@
         @foreach (permission_tag::$struct_types as $struct => $type)
         <th>{{ array_key_exists($struct, permission_tag::$struct_display_names)? permission_tag::$struct_display_names[$struct]: $struct }}</th>
         @endforeach
-        <th>
-            <a href='/permission_tags/add'>添加</a>
-        </th>
+        <th>系统名</th>
+        <th>操作</th>
     </tr>
 </thead>
     @foreach ($permission_tags as $id => $permission_tag)
@@ -54,10 +53,14 @@
         <td>{{ $permission_tag->{$struct} }}</td>
         @endif
         @endforeach
+        <td>{{ $permission_tag->system->name }}</td>
         <td>
-            <a href='/permission_tags/update/{{ $permission_tag->id }}}'>修改</a>
-            <a href='javascript:delete_{{ $permission_tag->id }}.submit();'>删除</a>
-            <form id='delete_{{ $permission_tag->id }}' action='/permission_tags/delete/{{ $permission_tag->id }}' method='POST'></form>
+            @if ($permission_tag->authorized_account_count() == 0)
+                <a href='javascript:delete_{{ $permission_tag->id }}.submit();'>删除</a>
+                <form id='delete_{{ $permission_tag->id }}' action='/permission_tags/delete/{{ $permission_tag->id }}' method='POST'></form>
+            @else
+                {{ $permission_tag->authorized_account_count() }} 用户被授权
+            @endif
         </td>
     </tr>
     @endforeach

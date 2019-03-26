@@ -4,6 +4,7 @@ class menu extends entity
 {
     public $structs = [
         'name' => '',
+        'url' => '',
         'level' => '',
         'system_id' => '',
         'menu_id' => '',
@@ -14,6 +15,7 @@ class menu extends entity
 
     public static $struct_types = [
         'name' => 'text',
+        'url' => 'text',
         'level' => 'number',
         'system_id' => 'number',
         'menu_id' => 'number',
@@ -21,6 +23,7 @@ class menu extends entity
 
     public static $struct_display_names = [
         'name' => '名称',
+        'url' => '地址',
         'level' => '等级',
         'system_id' => '系统ID',
         'menu_id' => '目录ID',
@@ -28,6 +31,7 @@ class menu extends entity
 
     public static $struct_descriptions = [
         'name' => '名称',
+        'url' => '地址',
         'level' => '等级',
         'system_id' => '系统ID',
         'menu_id' => '目录ID',
@@ -44,12 +48,23 @@ class menu extends entity
     public function __construct()
     {/*{{{*/
         $this->belongs_to('system');
-        $this->belongs_to('menu');
+        $this->has_one('menu');
     }/*}}}*/
 
-    public static function create()
+    public static function create($name, $url, $level, system $system, $menu = null)
     {/*{{{*/
-        return parent::init();
+        $m = parent::init();
+
+        $m->name = $name;
+        $m->url = $url;
+        $m->level = $level;
+        $m->system = $system;
+
+        if ($menu instanceof menu) {
+            $m->menu = $menu;
+        }
+
+        return $m;
     }/*}}}*/
 
 }

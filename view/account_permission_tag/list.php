@@ -32,37 +32,38 @@
     </style>
 </head>
 <body>
-<table>
-<thead>
-    <tr>
-        <th>ID</th>
-        @foreach (account_permission_tag::$struct_types as $struct => $type)
-        <th>{{ array_key_exists($struct, account_permission_tag::$struct_display_names)? account_permission_tag::$struct_display_names[$struct]: $struct }}</th>
+<form role="form" method="POST">
+    <table>
+    <thead>
+        <tr>
+            <th>账号名</th>
+            @foreach ($systems as $system_id => $system)
+                @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
+                @if ($permission_tag->is_not_deleted()) 
+                <th>{{ $permission_tag->name }}</th>
+                @endif
+                @endforeach
+            @endforeach
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($accounts as $account_id => $account)
+        <tr>
+            <td>{{ $account->email }}</td>
+            @foreach ($systems as $system_id => $system)
+                @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
+                    @if ($permission_tag->is_not_deleted()) 
+                    <td>
+                        <input name="{{ $account_id.'_'.$permission_tag_id }}" type="checkbox" {{ $permission_tag->has_authorized_account($account)? 'checked': '' }}>
+                    </td>
+                    @endif
+                @endforeach
+            @endforeach
+        </tr>
         @endforeach
-        <th>
-            <a href='/account_permission_tags/add'>添加</a>
-        </th>
-    </tr>
-</thead>
-    @foreach ($account_permission_tags as $id => $account_permission_tag)
-    <tr>
-        <td>{{ $id }}</td>
-        @foreach (account_permission_tag::$struct_types as $struct => $type)
-        @if (account_permission_tag::$struct_types[$struct] === 'enum')
-        <td>{{ $account_permission_tag->{'get_'.$struct.'_description'}() }}</td>
-        @else
-        <td>{{ $account_permission_tag->{$struct} }}</td>
-        @endif
-        @endforeach
-        <td>
-            <a href='/account_permission_tags/update/{{ $account_permission_tag->id }}}'>修改</a>
-            <a href='javascript:delete_{{ $account_permission_tag->id }}.submit();'>删除</a>
-            <form id='delete_{{ $account_permission_tag->id }}' action='/account_permission_tags/delete/{{ $account_permission_tag->id }}' method='POST'></form>
-        </td>
-    </tr>
-    @endforeach
-<tbody>
-</tbody>
-</table>
+    </tbody>
+    </table>
+    <input type="submit" value="保存修改">
+</form>
 </body>
 </html>

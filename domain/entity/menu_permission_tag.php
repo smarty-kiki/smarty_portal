@@ -1,10 +1,10 @@
 <?php
 
-class url_permission_tag extends entity
+class menu_permission_tag extends entity
 {
     public $structs = [
         'permission_tag_id' => '',
-        'url_id' => '',
+        'menu_id' => '',
     ];
 
     public static $entity_display_name = '地址权限标签关联';
@@ -12,17 +12,17 @@ class url_permission_tag extends entity
 
     public static $struct_types = [
         'permission_tag_id' => 'number',
-        'url_id' => 'number',
+        'menu_id' => 'number',
     ];
 
     public static $struct_display_names = [
         'permission_tag_id' => '权限标签ID',
-        'url_id' => '网页ID',
+        'menu_id' => '目录ID',
     ];
 
     public static $struct_descriptions = [
         'permission_tag_id' => '权限标签ID',
-        'url_id' => '网页ID',
+        'menu_id' => '目录ID',
     ];
 
     public static $struct_formats = [
@@ -36,12 +36,16 @@ class url_permission_tag extends entity
     public function __construct()
     {/*{{{*/
         $this->belongs_to('permission_tag');
-        $this->belongs_to('url');
+        $this->belongs_to('menu');
     }/*}}}*/
 
-    public static function create()
+    public static function create(permission_tag $permission_tag, menu $menu)
     {/*{{{*/
-        return parent::init();
+        $mpt = parent::init();
+        $mpt->permission_tag = $permission_tag;
+        $mpt->menu = $menu;
+
+        return $mpt;
     }/*}}}*/
 
 }

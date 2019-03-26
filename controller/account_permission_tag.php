@@ -10,91 +10,49 @@ if_get('/account_permission_tags', function ()
         $systems = dao('system')->find_all_by_admin_account($account);
     }
 
-    $account_permission_tags = [];
-    foreach ($systems as $system) {
-        $account_permission_tags = array_merge($account_permission_tags, $system->permission_tags);
-    }
+    relationship_batch_load($systems, 'permission_tags.account_permission_tags.account');
 
-    //todo::kiki
+    $accounts = dao('account')->find_all_valid();
+
     return render('account_permission_tag/list', [
-        'account_permission_tags' => $account_permission_tags,
+        'systems' => $systems,
+        'accounts' => $accounts,
     ]);
 });/*}}}*/
 
-if_get('/account_permission_tags/add', function ()
+if_post('/account_permission_tags', function ()
 {/*{{{*/
-    get_logined_account();
+    $account = get_logined_account();
 
-    return render('account_permission_tag/add');
-});/*}}}*/
+    if ($account->is_admin()) {
+        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
+    } else {
+        $systems = dao('system')->find_all_by_admin_account($account);
+    }
 
-if_post('/account_permission_tags/add', function ()
-{/*{{{*/
-    get_logined_account();
+    $permission_tags = relationship_batch_load($systems, 'permission_tags');
+    $account_permission_tags = relationship_batch_load($systems, 'permission_tags.account_permission_tags');
 
-    $inputs = [];
-    list(
-        $inputs['account_id'],
-        $inputs['permission_tag_id']
-    ) = input_list(
-        'account_id',
-        'permission_tag_id'
-    );
-    $inputs = array_filter($inputs, 'not_null');
+    foreach ($account_permission_tags as $account_permission_tag) {
+        $account_permission_tag->force_delete();
+    }
 
-    $account_permission_tag = account_permission_tag::create();
+    $accounts = dao('account')->find_all_valid();
 
-    foreach ($inputs as $property => $value) {
-        $account_permission_tag->{$property} = $value;
+    foreach ($_POST as $key => $value) {
+
+        if ($value) {
+
+            $ids = explode('_', $key);
+
+            if (isset($accounts[$ids[0]]) && isset($permission_tags[$ids[1]])) {
+                $account = $accounts[$ids[0]];
+                $permission_tag = $permission_tags[$ids[1]];
+
+                account_permission_tag::create($account, $permission_tag);
+            }
+        }
     }
 
     return redirect('/account_permission_tags');
-});/*}}}*/
-
-if_get('/account_permission_tags/update/*', function ($account_permission_tag_id)
-{/*{{{*/
-    get_logined_account();
-
-    $account_permission_tag = dao('account_permission_tag')->find($account_permission_tag_id);
-    otherwise($account_permission_tag->is_not_null(), 'account_permission_tag not found');
-
-    return render('account_permission_tag/update', [
-        'account_permission_tag' => $account_permission_tag,
-    ]);
-});/*}}}*/
-
-if_post('/account_permission_tags/update/*', function ($account_permission_tag_id)
-{/*{{{*/
-    get_logined_account();
-
-    $account_permission_tag = dao('account_permission_tag')->find($account_permission_tag_id);
-    otherwise($account_permission_tag->is_not_null(), 'account_permission_tag not found');
-
-    $inputs = [];
-    list(
-        $inputs['account_id'],
-        $inputs['permission_tag_id']
-    ) = input_list(
-        'account_id',
-        'permission_tag_id'
-    );
-    $inputs = array_filter($inputs, 'not_null');
-
-    foreach ($inputs as $property => $value) {
-        $account_permission_tag->{$property} = $value;
-    }
-
-    redirect('/account_permission_tags');
-});/*}}}*/
-
-if_post('/account_permission_tags/delete/*', function ($account_permission_tag_id)
-{/*{{{*/
-    get_logined_account();
-
-    $account_permission_tag = dao('account_permission_tag')->find($account_permission_tag_id);
-    otherwise($account_permission_tag->is_not_null(), 'account_permission_tag not found');
-
-    $account_permission_tag->delete();
-
-    redirect('/account_permission_tags');
 });/*}}}*/

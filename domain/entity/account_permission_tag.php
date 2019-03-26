@@ -39,9 +39,13 @@ class account_permission_tag extends entity
         $this->belongs_to('permission_tag');
     }/*}}}*/
 
-    public static function create()
+    public static function create(account $account, permission_tag $permission_tag)
     {/*{{{*/
-        return parent::init();
+        $apt = parent::init();
+        $apt->account = $account;
+        $apt->permission_tag = $permission_tag;
+
+        return $apt;
     }/*}}}*/
 
 }

@@ -36,11 +36,34 @@ class permission_tag extends entity
     public function __construct()
     {/*{{{*/
         $this->belongs_to('system');
+        $this->has_many('account_permission_tags', 'account_permission_tag');
     }/*}}}*/
 
-    public static function create()
+    public static function create(system $system, $tag_name)
     {/*{{{*/
-        return parent::init();
+        $pt =  parent::init();
+        $pt->system = $system;
+        $pt->name = $tag_name;
+
+        return $pt;
     }/*}}}*/
 
+    public function has_authorized_account(account $account)
+    {/*{{{*/
+        foreach ($this->account_permission_tags as $account_permission_tag) {
+
+            if ((! $account_permission_tag->is_deleted()) && $account_permission_tag->account_id === $account->id) {
+                return true;
+            }
+        }
+
+        return false;
+    }/*}}}*/
+
+    public function authorized_account_count()
+    {/*{{{*/
+        $account_permission_tags = $this->account_permission_tags;
+
+        return count($account_permission_tags);
+    }/*}}}*/
 }

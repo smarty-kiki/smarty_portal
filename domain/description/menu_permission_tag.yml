@@ -6,8 +6,8 @@ relationships:
     permission_tag:
         entity: permission_tag
         type: belongs_to
-    url:
-        entity: url
+    menu:
+        entity: menu
         type: belongs_to
 snaps: []
 ...

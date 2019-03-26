@@ -53,6 +53,7 @@ include CONTROLLER_DIR.'/account.php';
 include CONTROLLER_DIR.'/system.php';
 include CONTROLLER_DIR.'/account_permission_tag.php';
 include CONTROLLER_DIR.'/permission_tag.php';
+include CONTROLLER_DIR.'/permission.php';
 
 // fix
 not_found();

@@ -49,6 +49,8 @@
     <div class="left-bar">
         <div class="logo"></div>
         <div class="menu">
+
+
             <ul>
                 <li class="portal">
                     <strong>门户</strong>

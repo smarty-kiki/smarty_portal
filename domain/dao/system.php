@@ -12,4 +12,11 @@ class system_dao extends dao
             'delete_time' => null,
         ]);
     }/*}}}*/
+
+    public function find_by_token($token)
+    {/*{{{*/
+        return $this->find_by_condition('api_authorized_token = :token and delete_time is null', [
+            ':token' => $token,
+        ]);
+    }/*}}}*/
 }
