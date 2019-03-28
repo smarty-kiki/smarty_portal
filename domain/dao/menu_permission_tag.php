@@ -25,4 +25,17 @@ class menu_permission_tag_dao extends dao
                 ':not_in_ids' => $not_in_ids,
             ]);
     }/*}}}*/
+
+    public function find_all_by_system(system $system)
+    {/*{{{*/
+        return $this->find_all_by_sql('
+            select mpt.*
+            from menu_permission_tag mpt
+            inner join permission_tag pt on pt.id = mpt.permission_tag_id and pt.delete_time is null
+            where pt.system_id = :system_id
+            and mpt.delete_time is null
+            ', [
+            ':system_id' => $system->id,
+        ]);
+    }/*}}}*/
 }

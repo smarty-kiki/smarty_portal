@@ -12,4 +12,15 @@ class permission_tag_dao extends dao
             ':name' => $tag_name,
         ]);
     }/*}}}*/
+
+    public function find_all_by_system_ids(array $system_ids = [])
+    {/*{{{*/
+        if (empty($system_ids)) {
+            return [];
+        }
+
+        return $this->find_all_by_condition('delete_time is null and system_id in :system_ids', [
+            ':system_ids' => $system_ids,
+        ]);
+    }/*}}}*/
 }

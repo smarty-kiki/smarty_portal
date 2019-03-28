@@ -1,5 +1,26 @@
 <?php
 
+function permission_tag_refresh(system $system, $permission_info)
+{/*{{{*/
+    $menu_permission_tags = dao('menu_permission_tag')->find_all_by_system($system);
+
+    foreach ($menu_permission_tags as $menu_permission_tag) {
+
+        $menu_permission_tag->delete();
+    }
+
+    $menus = dao('menu')->find_all_by_system($system);
+
+    foreach ($menus as $menu) {
+
+        $menu->delete();
+    }
+
+    $permission_tag_infos = [];
+
+    permission_recursive_parse($permission_tag_infos, $system, $permission_info);
+}/*}}}*/
+
 function permission_tag_find_or_create(system $system, $tag_name)
 {/*{{{*/
     $permission_tag = dao('permission_tag')->find_by_system_tag_name($system, $tag_name);
@@ -11,74 +32,33 @@ function permission_tag_find_or_create(system $system, $tag_name)
     return $permission_tag;
 }/*}}}*/
 
-function permission_tag_refresh(system $system, $permission_tag_infos)
+function permission_recursive_parse(&$permission_tag_infos, $system, $node, $parent_menu = null, $level = menu::ROOT_LEVEL)
 {/*{{{*/
-    $retain_menu_ids = [];
-    $retain_menu_permission_tag_ids = [];
+    foreach ($node['menus'] as $menu_info) {
 
-    foreach ($permission_tag_infos as $tag_name => $permission_tag_info) {
+        if (isset($menu_info['url'])) {
 
-        $permission_tag = permission_tag_find_or_create($system, $tag_name);
+            otherwise(! isset($menu_info['menus']), 'menu ['.$menu_info['name'].'] should not have property [menus]');
 
-        $menu_permission_tags = dao('menu_permission_tag')->find_all_by_permission_tag($permission_tag);
+            $menu = menu::create($menu_info['name'], $menu_info['url'], $level, $system, $parent_menu);
 
-        $retain_menu_ids_indexed_by_id = array_flip($permission_tag_info);
-
-        foreach ($menu_permission_tags as $id => $menu_permission_tag) {
-
-            $menu = $menu_permission_tag->menu;
-
-            if (isset($retain_menu_ids_indexed_by_id[$menu->id])) {
-
-                $retain_menu_permission_tag_ids[] = $menu_permission_tag->id;
-                $retain_menu_ids[] = $menu->id;
-
-                unset($retain_menu_ids_indexed_by_id[$menu->id]);
-            }
-        }
-
-        foreach ($retain_menu_ids_indexed_by_id as $menu_id => $what_ever) {
-            menu_permission_tag::create($permission_tag, dao('menu')->find($menu_id));
-        }
-    }
-
-    $retain_menu_ids = array_unique($retain_menu_ids);
-    $retain_menu_permission_tag_ids = array_unique($retain_menu_permission_tag_ids);
-
-    $to_delete_menu_permission_tags = dao('menu_permission_tag')->find_all_by_not_in_ids($retain_menu_permission_tag_ids);
-
-    foreach ($to_delete_menu_permission_tags as $menu_permission_tag) {
-        $menu_permission_tag->delete();
-    }
-
-    $to_delete_menus = dao('menu')->find_all_by_system_and_not_in_ids($system, $retain_menu_ids);
-
-    foreach ($to_delete_menus as $menu) {
-        $menu->delete();
-    }
-}/*}}}*/
-
-function permission_recursive_parse(&$permission_tag_infos, &$system, $node, $parent_menu = null, $l = 0)
-{/*{{{*/
-    foreach ($node['menus'] as $menu) {
-
-        if (isset($menu['url'])) {
-
-            $m = menu_find_or_create($menu['name'], $menu['url'], $l, $system, $parent_menu);
-
-            foreach ($menu['permission_tags'] as $tag_name) {
+            foreach ($menu_info['permission_tags'] as $tag_name) {
 
                 if (! isset($permission_tag_infos[$tag_name])) {
-                    $permission_tag_infos[$tag_name] = [];
+
+                    $permission_tag_infos[$tag_name] = permission_tag_find_or_create($system, $tag_name);
                 }
-                $permission_tag_infos[$tag_name][] = $m->id;
+
+                menu_permission_tag::create($permission_tag_infos[$tag_name], $menu);
             }
 
         } else {
 
-            $m = menu_find_or_create($menu['name'], '', $l, $system, $parent_menu);
+            otherwise(! isset($menu_info['permission_tags']), 'menu ['.$menu_info['name'].'] should not have property [permission_tags]');
 
-            permission_recursive_parse($permission_tag_infos, $system, $menu, $m, $l + 1);
+            $menu = menu::create($menu_info['name'], '', $level, $system, $parent_menu);
+
+            permission_recursive_parse($permission_tag_infos, $system, $menu_info, $menu, $level + 1);
         }
     }
 };/*}}}*/

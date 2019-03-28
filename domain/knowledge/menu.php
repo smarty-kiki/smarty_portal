@@ -1,31 +1,32 @@
 <?php
 
-function menu_find_or_create($name, $url, $level, system $system, $parent_menu)
+function menu_recursive_render(array $menu_infos = [], $ul_style = '')
 {/*{{{*/
-    if ($url) {
-        $menu = dao('menu')->find_by_system_url($system, $url);
-
-        if ($menu->is_not_null()) {
-
-            $menu->menu = $parent_menu;
-            $menu->name = $name;
-            $menu->level = $level;
-
-            return $menu;
-        }
-    } else {
-
-        $menu = dao('menu')->find_by_system_name($system, $url);
-
-        if ($menu->is_not_null()) {
-
-            $menu->menu = $parent_menu;
-            $menu->level = $level;
-            $menu->url = $url;
-
-            return $menu;
-        }
+    if (empty($menu_infos)) {
+        return '';
     }
 
-    return menu::create($name, $url, $level, $system, $parent_menu);
+    $html = "<ul $ul_style>";
+
+    foreach ($menu_infos as $menu_info) {
+
+        $menu = $menu_info['entity'];
+
+        $html .= '  <li class="'.($menu->url? md5($menu->url): '').'">';
+
+        if ($menu->url) {
+
+            $html .= '    <a href="'.$menu->url.'" target="frame">'.$menu->name.'</a>';
+        } else {
+
+            $html .= '<strong>'.$menu->name.'</strong>';
+
+            $html .= menu_recursive_render($menu_info['nodes'], 'style="margin: 0px 10px 0px 10px;"');
+        }
+        $html .= '  </li>';
+    }
+            
+    $html .= '</ul>';
+
+    return $html;
 }/*}}}*/

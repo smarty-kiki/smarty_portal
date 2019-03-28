@@ -10,6 +10,10 @@ if_get('/account_permission_tags', function ()
         $systems = dao('system')->find_all_by_admin_account($account);
     }
 
+    if (empty($systems)) {
+        return '无权限查看该页面';
+    }
+
     relationship_batch_load($systems, 'permission_tags.account_permission_tags.account');
 
     $accounts = dao('account')->find_all_valid();
@@ -28,6 +32,10 @@ if_post('/account_permission_tags', function ()
         $systems = dao('system')->find_all_by_column(['delete_time' => null]);
     } else {
         $systems = dao('system')->find_all_by_admin_account($account);
+    }
+
+    if (empty($systems)) {
+        return redirect('/account_permission_tags');
     }
 
     $permission_tags = relationship_batch_load($systems, 'permission_tags');

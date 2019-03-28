@@ -21,6 +21,8 @@
         .left-bar ul li {
             font-size: 14px;
             color: #fff;
+            overflow: hidden;
+            white-space: nowrap;
         }
         .container {
             position: fixed;
@@ -49,14 +51,20 @@
     <div class="left-bar">
         <div class="logo"></div>
         <div class="menu">
-
-
             <ul>
+                @foreach ($systems as $system)
+                <li>
+                    <strong>{{ $system->name }}</strong>
+                    {{ menu_recursive_render($menu_infos[$system->id]) }}
+                </li>
+                @endforeach
                 <li class="portal">
                     <strong>门户</strong>
                     <ul>
+                        @if ($is_admin_or_system_admin)
                         <li class="permission_tag"> <a href="/permission_tags" target="frame">系统标签查看</a> </li>
                         <li class="account_permission_tag"> <a href="/account_permission_tags" target="frame">用户授权管理</a> </li>
+                        @endif
                         <li class="system" > <a href="/systems" target="frame">系统管理</a> </li>
                         <li class="account" > <a href="/accounts" target="frame">账号列表</a> </li>
                         <li class="mine"> <a href="/accounts/update/mine" target="frame">修改账户信息</a> </li>
@@ -73,8 +81,7 @@
         $(function () {
 
             var title = window.document.title;
-            var system = getQueryString('system');
-            var url = getQueryString('url');
+            var action = getQueryString('action');
             var atag = null,lis = [];
 
             $('a').on('click', function () {
@@ -89,10 +96,11 @@
 
                 lis = atag.parents('li');
 
-                history.pushState({}, title, '/?system='+lis[1].className+'&url='+lis[0].className);
+                history.pushState({}, title, '/?action='+lis[0].className);
             });
 
             function getQueryString(name) {
+
                 var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
                 var r = window.location.search.substr(1).match(reg);
                 if (r != null) {
@@ -102,8 +110,8 @@
             }
 
             // 处理 URL
-            if (system && url) {
-                atag = $('.' + system + ' .' + url + ' a')[0];
+            if (action) {
+                atag = $('.' + action + ' a')[0];
                 if (atag) {
                     atag.click();
                 } else {

@@ -16,11 +16,7 @@ if_post('/permission/rewrite', function ()
 
     $system->name = $permission_info['name'];
 
-    $permission_tag_infos = [];
-
-    permission_recursive_parse($permission_tag_infos, $system, $permission_info);
-
-    permission_tag_refresh($system, $permission_tag_infos);
+    permission_tag_refresh($system, $permission_info);
 
     return $token;
 });

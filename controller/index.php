@@ -4,8 +4,27 @@ if_get('/', function ()
 {
     $account = get_logined_account();
 
+    if ($account->is_admin()) {
+        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
+    } else {
+        $systems = dao('system')->find_all_by_admin_account($account);
+    }
+
+    $is_admin_or_system_admin = ! empty($systems);
+
+    $menu_infos = dao('menu')->find_all_tree_by_systems_indexed_by_system_id($systems);
+
+    $authorized_menu_infos = dao('menu')->find_all_tree_by_account_authorized($account);
+
+    $system_ids = array_keys($authorized_menu_infos);
+
+    $authorized_systems = dao('system')->find($system_ids);
+
     return render('index/frame', [
         'current_account' => $account,
+        'is_admin_or_system_admin' => $is_admin_or_system_admin,
+        'menu_infos' => array_replace_recursive($menu_infos, $authorized_menu_infos),
+        'systems' => array_replace_recursive($systems, $authorized_systems),
     ]);
 });
 

@@ -29,6 +29,6 @@ relationships:
         type: belongs_to
     menu:
         entity: menu
-        type: has_one
+        type: belongs_to
 snaps: []
 ...

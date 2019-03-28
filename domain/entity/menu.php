@@ -45,10 +45,12 @@ class menu extends entity
         
     ];
 
+    const ROOT_LEVEL = 0;
+
     public function __construct()
     {/*{{{*/
         $this->belongs_to('system');
-        $this->has_one('menu');
+        $this->belongs_to('menu');
     }/*}}}*/
 
     public static function create($name, $url, $level, system $system, $menu = null)
