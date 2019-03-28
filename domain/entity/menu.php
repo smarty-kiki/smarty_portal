@@ -46,6 +46,7 @@ class menu extends entity
     ];
 
     const ROOT_LEVEL = 0;
+    const NAME_MAX_LENGTH = 8;
 
     public function __construct()
     {/*{{{*/
@@ -55,6 +56,8 @@ class menu extends entity
 
     public static function create($name, $url, $level, system $system, $menu = null)
     {/*{{{*/
+        otherwise(mb_strlen($name) + $level < self::NAME_MAX_LENGTH, 'menu ['.$name.'] character count of name greater than '.(self::NAME_MAX_LENGTH - $level));
+
         $m = parent::init();
 
         $m->name = $name;
