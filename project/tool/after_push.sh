@@ -7,3 +7,5 @@ ln -fs $ROOT_DIR/project/config/production/nginx/smarty_portal.conf /etc/nginx/s
 
 /bin/bash $ROOT_DIR/project/tool/dep_build.sh link
 /usr/bin/php $ROOT_DIR/public/cli.php migrate
+
+chown -R www-data:www-data /var/www/smarty_portal/view/blade
