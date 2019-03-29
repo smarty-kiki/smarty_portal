@@ -2,7 +2,10 @@
 
 if_post('/permission/rewrite', function ()
 {
-    $token = input('token');
+    $permission_info = yaml_parse(input_post_raw());
+    otherwise(isset($permission_info['token']), 'invalid format');
+
+    $token = $permission_info['token'];
     otherwise($token, 'invalid token');
 
     $system = dao('system')->find_by_token($token);
@@ -11,8 +14,6 @@ if_post('/permission/rewrite', function ()
     if ($system->api_authorized_ip) {
         otherwise(ip() === $system->api_authorized_ip, 'invalid request ip '.ip());
     }
-
-    $permission_info = yaml_parse(input_post_raw());
 
     $system->name = $permission_info['name'];
 
