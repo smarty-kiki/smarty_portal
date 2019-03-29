@@ -6,14 +6,14 @@ function permission_tag_refresh(system $system, $permission_info)
 
     foreach ($menu_permission_tags as $menu_permission_tag) {
 
-        $menu_permission_tag->delete();
+        $menu_permission_tag->force_delete();
     }
 
     $menus = dao('menu')->find_all_by_system($system);
 
     foreach ($menus as $menu) {
 
-        $menu->delete();
+        $menu->force_delete();
     }
 
     $permission_tag_infos = [];

@@ -53,10 +53,12 @@
         <div class="menu">
             <ul>
                 @foreach ($systems as $system)
+                @if (isset($menu_infos[$system->id]))
                 <li>
                     <strong>{{ $system->name }}</strong>
                     {{ menu_recursive_render($menu_infos[$system->id]) }}
                 </li>
+                @endif
                 @endforeach
                 <li class="portal">
                     <strong>门户</strong>
