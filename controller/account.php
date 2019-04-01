@@ -50,7 +50,7 @@ if_post('/accounts/add', function ()
     );
     $inputs = array_filter($inputs, 'not_null');
 
-    $account = account::create($email, $password, $is_admin);
+    $account = account::create($inputs['email'], $inputs['password'], $inputs['is_admin']);
 
     foreach ($inputs as $property => $value) {
         $account->{$property} = $value;
