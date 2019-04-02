@@ -4,15 +4,8 @@ if_get('/permission_tags', function ()
 {/*{{{*/
     $account = get_logined_account();
 
-    if ($account->is_admin()) {
-        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
-    } else {
-        $systems = dao('system')->find_all_by_admin_account($account);
-    }
-
-    if (empty($systems)) {
-        return '无权限查看该页面';
-    }
+    $systems = dao('system')->find_all_by_admin_account($account);
+    otherwise(not_empty($systems), 'no administered system');
 
     $permission_tags = dao('permission_tag')->find_all_by_system_ids(array_keys($systems));
 
@@ -28,16 +21,10 @@ if_post('/permission_tags/delete/*', function ($permission_tag_id)
 {/*{{{*/
     $account = get_logined_account();
 
-    if ($account->is_admin()) {
-        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
-    } else {
-        $systems = dao('system')->find_all_by_admin_account($account);
-    }
-
     $permission_tag = dao('permission_tag')->find($permission_tag_id);
-
     otherwise($permission_tag->is_not_null(), 'permission_tag not found');
 
+    $systems = dao('system')->find_all_by_admin_account($account);
     otherwise(isset($systems[$permission_tag->system_id]), 'permission_tag not authorized');
 
     $permission_tag->delete();

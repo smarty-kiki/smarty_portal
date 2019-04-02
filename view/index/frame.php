@@ -76,7 +76,7 @@
         </div>
     </div>
     <div class="container">
-        <iframe src="/dashboard" frameborder="0" name="frame"></iframe>
+        <iframe id="iframe" src="/dashboard" frameborder="0" name="frame"></iframe>
     </div>
     <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
     <script>
@@ -85,6 +85,7 @@
             var title = window.document.title;
             var action = getQueryString('action');
             var atag = null,lis = [];
+            var iframe = $('#iframe');
 
             $('a').on('click', function () {
 
@@ -99,6 +100,10 @@
                 lis = atag.parents('li');
 
                 history.pushState({}, title, '/?action='+lis[0].className);
+
+                iframe.attr('src', addParam(atag.attr('href'), 'account_token', '{{ $current_account->sign }}'));
+
+                return false;
             });
 
             function getQueryString(name) {
@@ -109,6 +114,16 @@
                     return unescape(r[2]);
                 }
                 return null;
+            }
+
+            function addParam(url, paramKey, paramVal) {
+
+                var andStr = "?";
+                var qmark_index = url.indexOf("?");
+                if (qmark_index != -1) {
+                    andStr = "&";
+                }
+                return url + andStr + paramKey + "="+ encodeURIComponent(paramVal);
             }
 
             // 处理 URL

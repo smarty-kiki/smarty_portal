@@ -1,16 +1,10 @@
 <?php
 
 if_get('/', function ()
-{
+{/*{{{*/
     $account = get_logined_account();
 
-    if ($account->is_admin()) {
-        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
-    } else {
-        $systems = dao('system')->find_all_by_admin_account($account);
-    }
-
-    $is_admin_or_system_admin = ! empty($systems);
+    $systems = dao('system')->find_all_by_admin_account($account);
 
     $menu_infos = dao('menu')->find_all_tree_by_systems_indexed_by_system_id($systems);
 
@@ -22,26 +16,26 @@ if_get('/', function ()
 
     return render('index/frame', [
         'current_account' => $account,
-        'is_admin_or_system_admin' => $is_admin_or_system_admin,
+        'is_admin_or_system_admin' => ! empty($systems),
         'menu_infos' => array_replace_recursive($menu_infos, $authorized_menu_infos),
         'systems' => array_replace_recursive($systems, $authorized_systems),
     ]);
-});
+});/*}}}*/
 
 if_get('/dashboard', function ()
-{
+{/*{{{*/
     return render('index/index');
-});
+});/*}}}*/
 
 if_get('/login', function ()
-{
+{/*{{{*/
     return render('index/login', [
         'refer' => input('refer', ''),
     ]);
-});
+});/*}}}*/
 
 if_post('/login', function ()
-{
+{/*{{{*/
     $email = input_safe('email');
     $password = input_safe('password');
     $refer = input('refer', '/');
@@ -55,4 +49,4 @@ if_post('/login', function ()
     account_login($account, $password);
 
     redirect($refer);
-});
+});/*}}}*/

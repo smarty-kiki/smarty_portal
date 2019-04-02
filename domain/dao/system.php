@@ -7,10 +7,20 @@ class system_dao extends dao
 
     public function find_all_by_admin_account(account $account)
     {/*{{{*/
-        return $this->find_all_by_column([
-            'account_id' => $account->id,
-            'delete_time' => null,
-        ]);
+        if ($account->is_admin()) {
+
+            $columns = [
+                'delete_time' => null
+            ];
+        } else {
+
+            $columns = [
+                'account_id' => $account->id,
+                'delete_time' => null,
+            ];
+        }
+
+        return $this->find_all_by_column($columns);
     }/*}}}*/
 
     public function find_by_token($token)

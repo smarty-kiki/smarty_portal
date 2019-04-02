@@ -4,11 +4,7 @@ if_get('/account_permission_tags', function ()
 {/*{{{*/
     $account = get_logined_account();
 
-    if ($account->is_admin()) {
-        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
-    } else {
-        $systems = dao('system')->find_all_by_admin_account($account);
-    }
+    $systems = dao('system')->find_all_by_admin_account($account);
 
     if (empty($systems)) {
         return '无权限查看该页面';
@@ -28,11 +24,7 @@ if_post('/account_permission_tags', function ()
 {/*{{{*/
     $account = get_logined_account();
 
-    if ($account->is_admin()) {
-        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
-    } else {
-        $systems = dao('system')->find_all_by_admin_account($account);
-    }
+    $systems = dao('system')->find_all_by_admin_account($account);
 
     if (empty($systems)) {
         return redirect('/account_permission_tags');

@@ -161,7 +161,6 @@ command('description:make-domain-description', '通过交互式输入创建领�
 
         $n += 1;
 
-        //todo  snap 关联关系及字段的补全能力
         $snap_name = command_read("#$n Snap relationship name:", 'the_related_name'.$n);
 
         $snap_structs = [];

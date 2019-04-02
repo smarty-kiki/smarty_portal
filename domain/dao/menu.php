@@ -152,4 +152,31 @@ class menu_dao extends dao
 
         return $this->menu_tree($menus);
     }/*}}}*/
+
+    public function find_by_system_account_url(system $system, account $account, $url)
+    {/*{{{*/
+        if ($account->is_admin() || $system->is_administered_by_account($account)) {
+
+            return $this->find_by_sql('
+            select m.* from menu m
+            inner join system s on s.id = m.system_id and s.delete_time is null
+            where m.delete_time is null and s.id = :system_id
+            ', [
+                ':system_id' => $system->id,
+            ]);
+        } else {
+
+            return $this->find_by_sql('
+            select m.* from menu m
+            inner join menu_permission_tag mpt on mpt.menu_id = m.id and mpt.delete_time is null
+            inner join permission_tag pt on pt.id = mpt.permission_tag_id and pt.delete_time is null
+            inner join account_permission_tag apt on apt.permission_tag_id = pt.id and apt.delete_time is null
+            where apt.account_id = :account_id and m.system_id = :system_id and m.url = :url and m.delete_time is null
+            ', [
+                ':url' => $url,
+                ':system_id' => $system->id,
+                ':account_id' => $account->id,
+            ]);
+        }
+    }/*}}}*/
 }

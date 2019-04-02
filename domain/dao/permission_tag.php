@@ -23,4 +23,27 @@ class permission_tag_dao extends dao
             ':system_ids' => $system_ids,
         ]);
     }/*}}}*/
+
+    public function find_all_by_system_account(system $system, account $account)
+    {/*{{{*/
+        if ($account->is_admin() || $system->is_administered_by_account($account)) {
+
+            return $this->find_all_by_sql('
+                select * from permission_tag
+                where system_id = :system_id
+            ', [
+                ':system_id' => $system->id
+            ]);
+        } else {
+
+            return $this->find_all_by_sql('
+            select pt.* from permission_tag pt
+            inner join account_permission_tag apt on apt.permission_tag_id = pt.id and apt.delete_time is null
+            where pt.system_id = :system_id and pt.delete_time is null and apt.account_id = :account_id
+            ', [
+                ':system_id' => $system->id,
+                ':account_id' => $account->id,
+            ]);
+        }
+    }/*}}}*/
 }

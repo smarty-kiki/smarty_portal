@@ -4,11 +4,7 @@ if_get('/systems', function ()
 {/*{{{*/
     $account = get_logined_account();
 
-    if ($account->is_admin()) {
-        $systems = dao('system')->find_all_by_column(['delete_time' => null]);
-    } else {
-        $systems = dao('system')->find_all_by_admin_account($account);
-    }
+    $systems = dao('system')->find_all_by_admin_account($account);
 
     return render('system/list', [
         'systems' => $systems,

@@ -4,13 +4,7 @@ if_get('/accounts', function ()
 {/*{{{*/
     $account = get_logined_account();
 
-    if ($account->is_admin()) {
-        $accounts = dao('account')->find_all_by_column([
-            'delete_time' => null,
-        ]);
-    } else {
-        $accounts = dao('account')->find_all_has_permission_of_system_administered_by_account($account);
-    }
+    $accounts = dao('account')->find_all_has_permission_of_system_administered_by_account($account);
 
     return render('account/list', [
         'accounts' => $accounts,
@@ -91,10 +85,13 @@ if_post('/accounts/update/mine', function ()
 
 if_get('/accounts/update/*', function ($account_id)
 {/*{{{*/
-    get_logined_account();
+    $current_account = get_logined_account();
 
     $account = dao('account')->find($account_id);
     otherwise($account->is_not_null(), 'account not found');
+
+    $accounts = dao('account')->find_all_has_permission_of_system_administered_by_account($current_account);
+    otherwise(isset($accounts[$account_id]), 'account ['.$account_id.'] not administered by you');
 
     return render('account/update', [
         'account' => $account,
@@ -103,10 +100,13 @@ if_get('/accounts/update/*', function ($account_id)
 
 if_post('/accounts/update/*', function ($account_id)
 {/*{{{*/
-    get_logined_account();
+    $current_account = get_logined_account();
 
     $account = dao('account')->find($account_id);
     otherwise($account->is_not_null(), 'account not found');
+
+    $accounts = dao('account')->find_all_has_permission_of_system_administered_by_account($current_account);
+    otherwise(isset($accounts[$account_id]), 'account ['.$account_id.'] not administered by you');
 
     $inputs = [];
     list(
@@ -143,10 +143,13 @@ if_post('/accounts/update/*', function ($account_id)
 
 if_post('/accounts/delete/*', function ($account_id)
 {/*{{{*/
-    get_logined_account();
+    $current_account = get_logined_account();
 
     $account = dao('account')->find($account_id);
     otherwise($account->is_not_null(), 'account not found');
+
+    $accounts = dao('account')->find_all_has_permission_of_system_administered_by_account($current_account);
+    otherwise(isset($accounts[$account_id]), 'account ['.$account_id.'] not administered by you');
 
     $account->delete();
 

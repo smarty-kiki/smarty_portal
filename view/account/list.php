@@ -59,7 +59,7 @@
             @endif
         @endforeach
         <td>
-            <a href='/accounts/update/{{ $account->id }}}'>修改</a>
+            <a href='/accounts/update/{{ $account->id }}'>修改</a>
             <a href='javascript:delete_{{ $account->id }}.submit();'>删除</a>
             <form id='delete_{{ $account->id }}' action='/accounts/delete/{{ $account->id }}' method='POST'></form>
         </td>
