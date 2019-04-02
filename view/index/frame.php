@@ -45,6 +45,18 @@
            color: #fff;
            text-align: center;
         }
+        .processcontainer {
+           width: 100%;
+           border: 0px solid;
+           height: 2px;
+         }
+        #processbar {
+           background: #95CA0D;
+           float: left;
+           height: 100%;
+           text-align: center;
+           line-height: 150%;
+         }
     </style>
 </head>
 <body>
@@ -76,6 +88,9 @@
         </div>
     </div>
     <div class="container">
+        <div class="processcontainer">
+            <div id="processbar" style="width:0%;"></div>
+        </div>
         <iframe id="iframe" src="/dashboard" frameborder="0" name="frame"></iframe>
     </div>
     <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
@@ -87,7 +102,27 @@
             var atag = null,lis = [];
             var iframe = $('#iframe');
 
+            var bartimer = null;
+            var processbar = document.getElementById("processbar");
+
+            iframe.on('load', function () {
+
+                processbar.style.width = "0%";
+
+                if (bartimer) {
+                    window.clearInterval(bartimer);
+                }
+            });
+
             $('a').on('click', function () {
+
+                if (bartimer) {
+                    window.clearInterval(bartimer);
+                }
+
+                bartimer = window.setInterval(function () {
+                    setProcess();
+                }, 10);
 
                 $('.active').removeClass('active');
 
@@ -124,6 +159,14 @@
                     andStr = "&";
                 }
                 return url + andStr + paramKey + "="+ encodeURIComponent(paramVal);
+            }
+
+            function setProcess() {
+
+                processbar.style.width = parseFloat(processbar.style.width) + 0.5 + "%";
+                if(processbar.style.width == "90%"){
+                    window.clearInterval(bartimer);
+                }
             }
 
             // 处理 URL
