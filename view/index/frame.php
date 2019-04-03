@@ -116,14 +116,6 @@
 
             $('a').on('click', function () {
 
-                if (bartimer) {
-                    window.clearInterval(bartimer);
-                }
-
-                bartimer = window.setInterval(function () {
-                    setProcess();
-                }, 10);
-
                 $('.active').removeClass('active');
 
                 atag = $(this);
@@ -135,6 +127,14 @@
                 lis = atag.parents('li');
 
                 history.pushState({}, title, '/?action='+lis[0].className);
+
+                if (bartimer) {
+                    window.clearInterval(bartimer);
+                }
+
+                bartimer = window.setInterval(function () {
+                    setProcess();
+                }, 10);
 
                 iframe.attr('src', addParam(atag.attr('href'), 'account_token', '{{ $current_account->sign }}'));
 
