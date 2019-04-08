@@ -3,6 +3,9 @@
 function get_portal_account_info()
 {/*{{{*/
     $config = config('portal');
+
+    otherwise(! empty($config), '门户拦截器使用时需要有对应的配置');
+
     $domain = $config['domain'];
     $system_token = $config['system_token'];
 
