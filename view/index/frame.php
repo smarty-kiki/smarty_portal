@@ -51,7 +51,7 @@
            height: 2px;
          }
         #processbar {
-           background: #95CA0D;
+           background: #E95831;
            float: left;
            height: 100%;
            text-align: center;
@@ -60,30 +60,30 @@
 
 @-webkit-keyframes blink {
   0% { color: #aaa;}
-  95%, 100% { color: #95CA0D;}
+  95%, 100% { color: #E95831;}
 }
 
 @-moz-keyframes blink {
   0% { color: #aaa;}
-  95%, 100% { color: #95CA0D;}
+  95%, 100% { color: #E95831;}
 }
 
 @-o-keyframes blink {
   0% { color: #aaa;}
-  95%, 100% { color: #95CA0D;}
+  95%, 100% { color: #E95831;}
 }
 
 @keyframes blink {
   0% { color: #aaa;}
-  95%, 100% { color: #95CA0D;}
+  95%, 100% { color: #E95831;}
 }
 
 .blink {
-  animation: blink 2s infinite alternate;
-  -o-animation: blink 2s infinite alternate;
-  -ms-animation: blink 2s infinite alternate;
-  -moz-animation: blink 2s infinite alternate;
-  -webkit-animation: blink 2s infinite alternate;
+  animation: blink 1s infinite alternate;
+  -o-animation: blink 1s infinite alternate;
+  -ms-animation: blink 1s infinite alternate;
+  -moz-animation: blink 1s infinite alternate;
+  -webkit-animation: blink 1s infinite alternate;
 }
     </style>
 </head>
@@ -104,12 +104,12 @@
                     <strong>门户</strong>
                     <ul>
                         @if ($is_admin_or_system_admin)
-                        <li class="permission_tag"> <a class="blink" href="/permission_tags" target="frame">系统标签查看</a> </li>
-                        <li class="account_permission_tag"> <a class="blink" href="/account_permission_tags" target="frame">用户授权管理</a> </li>
+                        <li class="permission_tag"> <a href="/permission_tags" target="frame">系统标签查看</a> </li>
+                        <li class="account_permission_tag"> <a href="/account_permission_tags" target="frame">用户授权管理</a> </li>
                         @endif
-                        <li class="system" > <a class="blink" href="/systems" target="frame">系统管理</a> </li>
-                        <li class="account" > <a class="blink" href="/accounts" target="frame">账号列表</a> </li>
-                        <li class="mine"> <a class="blink" href="/accounts/update/mine" target="frame">修改账户信息</a> </li>
+                        <li class="system" > <a href="/systems" target="frame">系统管理</a> </li>
+                        <li class="account" > <a href="/accounts" target="frame">账号列表</a> </li>
+                        <li class="mine"> <a href="/accounts/update/mine" target="frame">修改账户信息</a> </li>
                     </ul>
                 </li>
             </ul>
@@ -211,12 +211,12 @@
                 }
             }
 
-            $('.blink').each(function (k, v) {
+            $('a').each(function (k, v) {
 
                 var v = $(v);
 
-                if (localStorage.getItem(v.attr('href'))) {
-                    v.removeClass('blink');
+                if (! localStorage.getItem(v.attr('href'))) {
+                    v.addClass('blink');
                 }
             });
 
