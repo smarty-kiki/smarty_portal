@@ -42,7 +42,7 @@ if_post('/systems/add', function ()
     );
     $inputs = array_filter($inputs, 'not_null');
 
-    otherwise($account->is_admin() || $account->id === $inputs['account_id'], '非管理员不能创建非自己管理的系统');
+    otherwise($account->is_admin() || $account->id === (int) $inputs['account_id'], '非管理员不能创建非自己管理的系统');
 
     $system = system::create();
 
