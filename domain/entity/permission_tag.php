@@ -64,6 +64,14 @@ class permission_tag extends entity
     {/*{{{*/
         $account_permission_tags = $this->account_permission_tags;
 
-        return count($account_permission_tags);
+        $count = 0;
+
+        foreach ($account_permission_tags as $account_permission_tag) {
+            if ($account_permission_tag->is_not_null()) {
+                $count ++;
+            }
+        }
+
+        return $count;
     }/*}}}*/
 }
