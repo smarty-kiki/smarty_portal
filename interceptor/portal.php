@@ -7,6 +7,13 @@ function get_portal_account_info()
     $system_token = $config['system_token'];
 
     $url = uri();
+    $url_info = parse_url($url);
+    parse_str($url_info['query'], $query_info);
+    unset($query_info['account_token']);
+    $url_info['query'] = http_build_query($query_info);
+
+    $url = unparse_url($url_info);
+
     $token = input('account_token');
 
     $info = remote_get_json($domain.'/permission/query?'.http_build_query([
