@@ -153,5 +153,10 @@ if_post('/accounts/delete/*', function ($account_id)
 
     $account->delete();
 
+    $account_permission_tags = dao('account_permission_tag')->find_all_by_account($account);
+    foreach ($account_permission_tags as $account_permission_tag) {
+        $account_permission_tag->delete();
+    }
+
     redirect('/accounts');
 });/*}}}*/

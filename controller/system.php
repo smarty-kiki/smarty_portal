@@ -118,5 +118,25 @@ if_post('/systems/delete/*', function ($system_id)
 
     $system->delete();
 
+    $menus = dao('menu')->find_all_by_system($system);
+    foreach ($menus as $menu) {
+        $menu->delete();
+    }
+
+    $menu_permission_tags = dao('menu_permission_tag')->find_all_by_system($system);
+    foreach ($menu_permission_tags as $menu_permission_tag) {
+        $menu_permission_tag->delete();
+    }
+
+    $permission_tags = dao('permission_tag')->find_all_by_system($system);
+    foreach ($permission_tags as $permission_tag) {
+        $permission_tag->delete();
+    }
+
+    $account_permission_tags = dao('account_permission_tag')->find_all_by_system($system);
+    foreach ($account_permission_tags as $account_permission_tag) {
+        $account_permission_tag->delete();
+    }
+
     redirect('/systems');
 });/*}}}*/

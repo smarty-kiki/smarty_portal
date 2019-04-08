@@ -28,12 +28,7 @@ class permission_tag_dao extends dao
     {/*{{{*/
         if ($account->is_admin() || $system->is_administered_by_account($account)) {
 
-            return $this->find_all_by_sql('
-                select * from permission_tag
-                where system_id = :system_id
-            ', [
-                ':system_id' => $system->id
-            ]);
+            return $this->find_all_by_system($system);
         } else {
 
             return $this->find_all_by_sql('
@@ -45,5 +40,16 @@ class permission_tag_dao extends dao
                 ':account_id' => $account->id,
             ]);
         }
+    }/*}}}*/
+
+    public function find_all_by_system(system $system)
+    {/*{{{*/
+        return $this->find_all_by_sql('
+                select * from permission_tag
+                where system_id = :system_id
+                delete_time is null
+            ', [
+                ':system_id' => $system->id
+            ]);
     }/*}}}*/
 }
