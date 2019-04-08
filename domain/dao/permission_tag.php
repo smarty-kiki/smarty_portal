@@ -47,7 +47,7 @@ class permission_tag_dao extends dao
         return $this->find_all_by_sql('
                 select * from permission_tag
                 where system_id = :system_id
-                delete_time is null
+                and delete_time is null
             ', [
                 ':system_id' => $system->id
             ]);
