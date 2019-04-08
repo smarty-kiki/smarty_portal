@@ -70,7 +70,12 @@ class menu_dao extends dao
             return [];
         }
 
-        return $this->menu_tree($this->find_all_by_condition('system_id in :system_ids and delete_time is null order by level desc', [
+        return $this->menu_tree($this->find_all_by_sql('
+            select m.* from menu m
+            inner join system s on s.id = m.system_id and s.delete_time is null
+            where
+            m.system_id in :system_ids and m.delete_time is null order by m.level desc
+            ', [
             ':system_ids' => $system_ids,
         ]));
     }/*}}}*/
@@ -95,6 +100,7 @@ class menu_dao extends dao
     {/*{{{*/
         $sql_template = '
             select m.* from menu m
+            inner join system s on s.id = m.system_id and s.delete_time is null
             inner join menu_permission_tag mpt on mpt.menu_id = m.id and mpt.delete_time is null
             inner join permission_tag pt on pt.id = mpt.permission_tag_id and pt.delete_time is null
             inner join account_permission_tag apt on apt.permission_tag_id = pt.id and apt.delete_time is null
