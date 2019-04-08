@@ -16,7 +16,7 @@ function menu_recursive_render(array $menu_infos = [], $ul_style = '')
 
         if ($menu->url) {
 
-            $html .= '    <a href="'.$menu->url.'" target="frame">'.$menu->name.'</a>';
+            $html .= '    <a class="blink"  href="'.$menu->url.'" target="frame">'.$menu->name.'</a>';
         } else {
 
             $html .= '<strong>'.$menu->name.'</strong>';

@@ -55,7 +55,7 @@
         @endif
         @endforeach
         <td>
-            <a href='/systems/update/{{ $system->id }}}'>修改</a>
+            <a href='/systems/update/{{ $system->id }}'>修改</a>
             <a href='javascript:delete_{{ $system->id }}.submit();'>删除</a>
             <form id='delete_{{ $system->id }}' action='/systems/delete/{{ $system->id }}' method='POST'></form>
         </td>

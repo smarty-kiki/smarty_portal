@@ -21,6 +21,7 @@ include COMMAND_DIR.'/crud.php';
 
 include COMMAND_DIR.'/account.php';
 include COMMAND_DIR.'/portal.php';
+include COMMAND_DIR.'/seed.php';
 
 // fix
 command_not_found();

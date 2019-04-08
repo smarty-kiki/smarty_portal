@@ -57,6 +57,34 @@
            text-align: center;
            line-height: 150%;
          }
+
+@-webkit-keyframes blink {
+  0% { color: #aaa;}
+  95%, 100% { color: #95CA0D;}
+}
+
+@-moz-keyframes blink {
+  0% { color: #aaa;}
+  95%, 100% { color: #95CA0D;}
+}
+
+@-o-keyframes blink {
+  0% { color: #aaa;}
+  95%, 100% { color: #95CA0D;}
+}
+
+@keyframes blink {
+  0% { color: #aaa;}
+  95%, 100% { color: #95CA0D;}
+}
+
+.blink {
+  animation: blink 2s infinite alternate;
+  -o-animation: blink 2s infinite alternate;
+  -ms-animation: blink 2s infinite alternate;
+  -moz-animation: blink 2s infinite alternate;
+  -webkit-animation: blink 2s infinite alternate;
+}
     </style>
 </head>
 <body>
@@ -76,12 +104,12 @@
                     <strong>门户</strong>
                     <ul>
                         @if ($is_admin_or_system_admin)
-                        <li class="permission_tag"> <a href="/permission_tags" target="frame">系统标签查看</a> </li>
-                        <li class="account_permission_tag"> <a href="/account_permission_tags" target="frame">用户授权管理</a> </li>
+                        <li class="permission_tag"> <a class="blink" href="/permission_tags" target="frame">系统标签查看</a> </li>
+                        <li class="account_permission_tag"> <a class="blink" href="/account_permission_tags" target="frame">用户授权管理</a> </li>
                         @endif
-                        <li class="system" > <a href="/systems" target="frame">系统管理</a> </li>
-                        <li class="account" > <a href="/accounts" target="frame">账号列表</a> </li>
-                        <li class="mine"> <a href="/accounts/update/mine" target="frame">修改账户信息</a> </li>
+                        <li class="system" > <a class="blink" href="/systems" target="frame">系统管理</a> </li>
+                        <li class="account" > <a class="blink" href="/accounts" target="frame">账号列表</a> </li>
+                        <li class="mine"> <a class="blink" href="/accounts/update/mine" target="frame">修改账户信息</a> </li>
                     </ul>
                 </li>
             </ul>
@@ -138,6 +166,10 @@
 
                 iframe.attr('src', addParam(atag.attr('href'), 'account_token', '{{ $current_account->sign }}'));
 
+                localStorage.setItem(atag.attr('href'), true);
+
+                atag.removeClass('blink');
+
                 return false;
             });
 
@@ -178,6 +210,15 @@
                     alert('咳咳，正在打开的这个 URL 不能随便看哦');
                 }
             }
+
+            $('.blink').each(function (k, v) {
+
+                var v = $(v);
+
+                if (localStorage.getItem(v.attr('href'))) {
+                    v.removeClass('blink');
+                }
+            });
 
         });
     </script>
