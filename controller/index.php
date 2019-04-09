@@ -48,5 +48,5 @@ if_post('/login', function ()
 
     account_login($account, $password);
 
-    redirect($refer);
+    return redirect($refer);
 });/*}}}*/
