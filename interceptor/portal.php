@@ -1,5 +1,7 @@
 <?php
 
+define('PORTAL_ACCOUNT_TOKEN_NAME', 'account_token');
+
 function get_portal_account_info()
 {/*{{{*/
     $config = config('portal');
@@ -9,15 +11,22 @@ function get_portal_account_info()
     $domain = $config['domain'];
     $system_token = $config['system_token'];
 
-    $url = uri();
-    $url_info = parse_url($url);
-    parse_str($url_info['query'], $query_info);
-    unset($query_info['account_token']);
-    $url_info['query'] = http_build_query($query_info);
+    $url = url_transfer(uri(), function ($url_info) {
 
-    $url = unparse_url($url_info);
+        unset($url_info['query'][PORTAL_ACCOUNT_TOKEN_NAME]);
 
-    $token = input('account_token');
+        return $url_info;
+    });
+
+    $token = input(PORTAL_ACCOUNT_TOKEN_NAME);
+    if (is_null($token)) {
+        $token = cookie(PORTAL_ACCOUNT_TOKEN_NAME);
+    }
+
+    if (is_null($token)) {
+        redirect($domain.'/login');
+        exit;
+    }
 
     $info = remote_get_json($domain.'/permission/query?'.http_build_query([
         'url' => $url,
@@ -30,6 +39,8 @@ function get_portal_account_info()
         redirect($domain.'/login');
         exit;
     }
+
+    setcookie(PORTAL_ACCOUNT_TOKEN_NAME, $token, time() + 31536000);
 
     return $info;
 }/*}}}*/
