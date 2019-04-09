@@ -30,7 +30,7 @@ if_get('/dashboard', function ()
 if_get('/login', function ()
 {/*{{{*/
     return render('index/login', [
-        'refer' => input('refer', ''),
+        'refer' => input('refer', '/'),
     ]);
 });/*}}}*/
 
@@ -39,7 +39,6 @@ if_post('/login', function ()
     $email = input_safe('email');
     $password = input_safe('password');
     $refer = input('refer', '/');
-    var_dump($refer);exit;
 
     otherwise(not_null($email), '邮箱不能为空');
     otherwise(not_null($password), '密码不能为空');
