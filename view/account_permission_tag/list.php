@@ -36,13 +36,27 @@
     <table>
     <thead>
         <tr>
-            <th>账号名</th>
-            <th>昵称</th>
+            <th rowspan=2>账号名</th>
+            <th rowspan=2>昵称</th>
+            @foreach ($systems as $system_id => $system)
+                {{ $count = 0; }}
+                @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
+                    @if ($permission_tag->is_not_deleted())
+                        {{ $count += 1; }}
+                    @endif
+                @endforeach
+
+                @if ($count > 0)
+                <th rowspan={{ $count }}>{{ $system->name }}</th>
+                @endif
+            @endforeach
+        </tr>
+        <tr>
             @foreach ($systems as $system_id => $system)
                 @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
-                @if ($permission_tag->is_not_deleted()) 
-                <th>{{ $permission_tag->name }}</th>
-                @endif
+                    @if ($permission_tag->is_not_deleted()) 
+                    <th>{{ $permission_tag->name }}</th>
+                    @endif
                 @endforeach
             @endforeach
         </tr>
