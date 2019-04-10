@@ -47,7 +47,7 @@
                 @endforeach
 
                 @if ($count > 0)
-                <th rowspan={{ $count }}>{{ $system->name }}[{{ $system_id }}]</th>
+                <th rowspan={{ $count }}>{{ $system->name }}[ID:{{ $system_id }}]</th>
                 @endif
             @endforeach
         </tr>
