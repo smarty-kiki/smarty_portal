@@ -37,6 +37,7 @@
     <thead>
         <tr>
             <th>账号名</th>
+            <th>昵称</th>
             @foreach ($systems as $system_id => $system)
                 @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
                 @if ($permission_tag->is_not_deleted()) 
@@ -50,6 +51,7 @@
         @foreach ($accounts as $account_id => $account)
         <tr>
             <td>{{ $account->email }}</td>
+            <td>{{ $account->nick_name }}</td>
             @foreach ($systems as $system_id => $system)
                 @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
                     @if ($permission_tag->is_not_deleted()) 
