@@ -39,7 +39,7 @@
             <th rowspan=2>账号名</th>
             <th rowspan=2>昵称</th>
             @foreach ($systems as $system_id => $system)
-                {{ $count = 0; }}
+                <?php $count = 0; ?>
                 @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
                     @if ($permission_tag->is_not_deleted())
                         {{ $count += 1; }}
@@ -47,7 +47,7 @@
                 @endforeach
 
                 @if ($count > 0)
-                <th rowspan={{ $count }}>{{ $system->name }}</th>
+                <th rowspan={{ $count }}>{{ $system->name }}[{{ $system_id }}]</th>
                 @endif
             @endforeach
         </tr>
