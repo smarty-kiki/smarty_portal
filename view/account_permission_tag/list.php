@@ -42,7 +42,7 @@
                 <?php $count = 0; ?>
                 @foreach ($system->permission_tags as $permission_tag_id => $permission_tag)
                     @if ($permission_tag->is_not_deleted())
-                        {{ $count += 1; }}
+                        <?php $count += 1; ?>
                     @endif
                 @endforeach
 
