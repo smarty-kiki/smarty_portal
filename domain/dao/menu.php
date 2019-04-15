@@ -7,24 +7,24 @@ class menu_dao extends dao
 
     public function find_by_system_url(system $system, $url)
     {/*{{{*/
-        return $this->find_by_condition('system_id = :system_id and url = :url and delete_time is null', [
-            ':system_id' => $system->id,
-            ':url' => $url,
+        return $this->find_by_column([
+            'system_id' => $system->id,
+            'url' => $url,
         ]);
     }/*}}}*/
 
     public function find_by_system_name(system $system, $name)
     {/*{{{*/
-        return $this->find_by_condition('system_id = :system_id and name = :name and delete_time is null', [
-            ':system_id' => $system->id,
-            ':name' => $name,
+        return $this->find_by_column([
+            'system_id' => $system->id,
+            'name' => $name,
         ]);
     }/*}}}*/
 
     public function find_all_by_system(system $system)
     {/*{{{*/
-        return $this->find_all_by_condition('system_id = :system_id and delete_time is null', [
-            ':system_id' => $system->id,
+        return $this->find_all_by_condition([
+            'system_id' => $system->id,
         ]);
     }/*}}}*/
 
@@ -86,14 +86,10 @@ class menu_dao extends dao
             $not_in_ids[] = 0;
         }
 
-        return $this->find_all_by_condition(
-            'system_id = :system_id 
-            and id not in :not_in_ids
-            and delete_time is null',
-            [
-                ':system_id' => $system->id,
-                ':not_in_ids' => $not_in_ids,
-            ]);
+        return $this->find_all_by_column([
+            'system_id' => $system->id,
+            'id not' => $not_in_ids,
+        ]);
     }/*}}}*/
 
     public function find_all_tree_by_account_authorized(account $account)

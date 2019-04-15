@@ -7,9 +7,9 @@ class permission_tag_dao extends dao
 
     public function find_by_system_tag_name(system $system, $tag_name)
     {/*{{{*/
-        return $this->find_by_condition('system_id = :system_id and name = :name and delete_time is null', [
-            ':system_id' => $system->id,
-            ':name' => $tag_name,
+        return $this->find_by_column([
+            'system_id' => $system->id,
+            'name' => $tag_name,
         ]);
     }/*}}}*/
 
@@ -19,8 +19,8 @@ class permission_tag_dao extends dao
             return [];
         }
 
-        return $this->find_all_by_condition('delete_time is null and system_id in :system_ids', [
-            ':system_ids' => $system_ids,
+        return $this->find_all_by_column([
+            'system_id' => $system_ids,
         ]);
     }/*}}}*/
 
@@ -44,12 +44,8 @@ class permission_tag_dao extends dao
 
     public function find_all_by_system(system $system)
     {/*{{{*/
-        return $this->find_all_by_sql('
-                select * from permission_tag
-                where system_id = :system_id
-                and delete_time is null
-            ', [
-                ':system_id' => $system->id
-            ]);
+        return $this->find_all_by_column([
+            'system_id' => $system->id
+        ]);
     }/*}}}*/
 }

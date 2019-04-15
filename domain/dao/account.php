@@ -7,17 +7,17 @@ class account_dao extends dao
 
     public function find_by_email_and_valid($email)
     {/*{{{*/
-        return $this->find_by_condition('`email` = :email and `status` = :status and `delete_time` is null', [
-            ':status' => account::STATUS_VALID,
-            ':email' => $email,
+        return $this->find_by_column([
+            'email' => $email,
+            'status' => account::STATUS_VALID,
         ]);
     }/*}}}*/
 
     public function find_by_sign_and_valid($sign)
     {/*{{{*/
-        return $this->find_by_condition('`sign` = :sign and `status` = :status and `delete_time` is null', [
-            ':status' => account::STATUS_VALID,
-            ':sign' => $sign,
+        return $this->find_by_column([
+            'status' => account::STATUS_VALID,
+            'sign' => $sign,
         ]);
     }/*}}}*/
 
@@ -25,9 +25,7 @@ class account_dao extends dao
     {/*{{{*/
         if ($account->is_admin()) {
 
-            return $this->find_all_by_column([
-                'delete_time' => null,
-            ]);
+            return $this->find_all();
         } else {
 
             $sql_template = '
@@ -51,8 +49,8 @@ class account_dao extends dao
 
     public function find_all_valid()
     {/*{{{*/
-        return $this->find_all_by_condition('`status` = :status and `delete_time` is null', [
-            ':status' => account::STATUS_VALID,
+        return $this->find_all_by_column([
+            'status' => account::STATUS_VALID,
         ]);
     }/*}}}*/
 }

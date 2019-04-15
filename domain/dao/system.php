@@ -9,24 +9,19 @@ class system_dao extends dao
     {/*{{{*/
         if ($account->is_admin()) {
 
-            $columns = [
-                'delete_time' => null
-            ];
+            return $this->find_all();
         } else {
 
-            $columns = [
+            return $this->find_all_by_column([
                 'account_id' => $account->id,
-                'delete_time' => null,
-            ];
+            ]);
         }
-
-        return $this->find_all_by_column($columns);
     }/*}}}*/
 
     public function find_by_token($token)
     {/*{{{*/
-        return $this->find_by_condition('api_authorized_token = :token and delete_time is null', [
-            ':token' => $token,
+        return $this->find_by_column([
+            'api_authorized_token' => $token,
         ]);
     }/*}}}*/
 }

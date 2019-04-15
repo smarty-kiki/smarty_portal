@@ -7,8 +7,8 @@ class menu_permission_tag_dao extends dao
 
     public function find_all_by_permission_tag(permission_tag $permission_tag)
     {/*{{{*/
-        return $this->find_all_by_condition('permission_tag_id = :permission_tag_id and delete_time is null', [
-            ':permission_tag_id' => $permission_tag->id,
+        return $this->find_all_by_column([
+            'permission_tag_id' => $permission_tag->id,
         ]);
     }/*}}}*/
 
@@ -18,12 +18,9 @@ class menu_permission_tag_dao extends dao
             $not_in_ids[] = 0;
         }
 
-        return $this->find_all_by_condition('
-            id not in :not_in_ids
-            and delete_time is null',
-            [
-                ':not_in_ids' => $not_in_ids,
-            ]);
+        return $this->find_all_by_column([
+            'id not' => $not_in_ids,
+        ]);
     }/*}}}*/
 
     public function find_all_by_system(system $system)
