@@ -1,0 +1,13 @@
+---
+display_name: 请求权限标签关联
+description: 请求权限标签关联
+structs: []
+relationships:
+    permission_tag:
+        entity: permission_tag
+        type: belongs_to
+    request:
+        entity: request
+        type: belongs_to
+snaps: []
+...

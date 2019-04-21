@@ -23,7 +23,7 @@ class menu_dao extends dao
 
     public function find_all_by_system(system $system)
     {/*{{{*/
-        return $this->find_all_by_condition([
+        return $this->find_all_by_column([
             'system_id' => $system->id,
         ]);
     }/*}}}*/

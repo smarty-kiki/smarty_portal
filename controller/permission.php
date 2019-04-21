@@ -36,7 +36,9 @@ if_get('/permission/query', function ()
 
     $menu = dao('menu')->find_by_system_account_url($system, $account, $url);
 
-    if ($menu->is_not_null()) {
+    $request = dao('request')->find_by_system_account_url($system, $account, $url);
+
+    if ($menu->is_not_null() || $request->is_not_null()) {
 
         $permission_tags = dao('permission_tag')->find_all_by_system_account($system, $account);
 
