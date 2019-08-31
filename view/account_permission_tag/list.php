@@ -47,7 +47,7 @@
                 @endforeach
 
                 @if ($count > 0)
-                <th rowspan={{ $count }}>{{ $system_id.'.'.$system->name }}</th>
+                <th rowspan=1 colspan={{ $count }}>{{ $system_id.'.'.$system->name }}</th>
                 @endif
             @endforeach
         </tr>
