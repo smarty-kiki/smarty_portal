@@ -25,6 +25,7 @@ function get_portal_account_info()
 
     if (is_null($token)) {
         redirect($domain.'/login');
+        trigger_redirect();
         exit;
     }
 
@@ -37,6 +38,7 @@ function get_portal_account_info()
     if (! $info['authorized']) {
 
         redirect($domain.'/login');
+        trigger_redirect();
         exit;
     }
 
