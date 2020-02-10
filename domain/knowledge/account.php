@@ -13,12 +13,14 @@ function get_logined_account()
 
     if (is_null($sign)) {
         redirect('/login?refer='.uri());
+        trigger_redirect();
         exit;
     }
 
     $account = dao('account')->find_by_sign_and_valid($sign);
     if ($account->is_null()) {
         redirect('/login?refer='.uri());
+        trigger_redirect();
         exit;
     }
 
