@@ -2,6 +2,8 @@
 
 if_get('/', function ()
 {/*{{{*/
+    $account = get_logined_account();
+
     $systems = dao('system')->find_all_by_admin_account($account);
 
     $menu_infos = dao('menu')->find_all_tree_by_systems_indexed_by_system_id($systems);
