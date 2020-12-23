@@ -7,7 +7,7 @@ class menu extends entity
         'url' => '',
         'level' => '',
         'system_id' => '',
-        'menu_id' => '',
+        'menu_id' => 0,
     ];
 
     public static $entity_display_name = '目录';

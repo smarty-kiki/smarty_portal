@@ -11,7 +11,7 @@
         .left-bar {
             position: fixed;
             height: 100%;
-            width: 10%;
+            width: 170px;
             background-color: #666;
         }
         .left-bar ul {
@@ -27,8 +27,7 @@
         .container {
             position: fixed;
             height: 100%;
-            width: 90%;
-            margin-left: 10%;
+            margin-left: 170px;
         }
         iframe {
             width: 100%;
@@ -124,6 +123,8 @@
     <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
     <script>
         $(function () {
+
+            $('.container').width(document.body.clientWidth - $('.left-bar').width())
 
             var title = window.document.title;
             var action = getQueryString('action');
